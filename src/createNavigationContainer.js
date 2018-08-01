@@ -24,11 +24,11 @@ function validateProps(props) {
   if (keys.length !== 0) {
     throw new Error(
       'This navigator has both navigation and container props, so it is ' +
-        `unclear if it should own its own state. Remove props: "${keys.join(
-          ', '
-        )}" ` +
-        'if the navigator should get its state from the navigation prop. If the ' +
-        'navigator should maintain its own state, do not pass a navigation prop.'
+      `unclear if it should own its own state. Remove props: "${keys.join(
+        ', '
+      )}" ` +
+      'if the navigator should get its state from the navigation prop. If the ' +
+      'navigator should maintain its own state, do not pass a navigation prop.'
     );
   }
 }
@@ -120,11 +120,11 @@ export default function createNavigationContainer(Component) {
       if (keys.length !== 0) {
         throw new Error(
           'This navigator has both navigation and container props, so it is ' +
-            `unclear if it should own its own state. Remove props: "${keys.join(
-              ', '
-            )}" ` +
-            'if the navigator should get its state from the navigation prop. If the ' +
-            'navigator should maintain its own state, do not pass a navigation prop.'
+          `unclear if it should own its own state. Remove props: "${keys.join(
+            ', '
+          )}" ` +
+          'if the navigator should get its state from the navigation prop. If the ' +
+          'navigator should maintain its own state, do not pass a navigation prop.'
         );
       }
     }
@@ -229,7 +229,7 @@ export default function createNavigationContainer(Component) {
         try {
           startupState = JSON.parse(startupStateJSON);
           _reactNavigationIsHydratingState = true;
-        } catch (e) {}
+        } catch (e) { }
       }
 
       // Pull state out of URL
@@ -311,6 +311,12 @@ export default function createNavigationContainer(Component) {
       // navState will have the most up-to-date value, because setState sometimes behaves asyncronously
       this._navState = this._navState || this.state.nav;
       const lastNavState = this._navState;
+
+      //Shitty fix for shitty android view pager
+      if (!lastNavState) {
+        return
+      }
+
       invariant(lastNavState, 'should be set in constructor if stateful');
       const reducedState = Component.router.getStateForAction(
         action,
